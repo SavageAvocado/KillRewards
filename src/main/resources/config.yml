@@ -1,0 +1,16 @@
+# Allow other developers to make additions to this plugin via the KillRewardsAPI?
+api-enabled: true
+
+# The amount of time a player must wait between killing a specific player to receive a reward.
+# Valid time-units: NANOSECONDS, MICROSECONDS, MILLISECONDS, SECONDS, MINUTES, HOURS, DAYS
+reward-period:
+  time-unit: HOURS
+  time: 24
+
+# The message that will be sent to the killer.
+message: '&eCongrats, %player%! You have received 10 steak for killing %victim%.'
+
+# The commands that will be executed via console when a player successfully kills another player.
+# %player% will be replaced with the killer's username.
+rewards:
+  - 'give %player% cooked_beef 10'

@@ -1,0 +1,9 @@
+name: KillRewards
+description: Reward players for killing other players.
+
+author: SavageAvocado
+website: savagedev.net
+
+main: net.savagedev.killrewards.KillRewards
+api-version: "1.13"
+version: 1.0.0
