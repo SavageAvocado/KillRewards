@@ -4,7 +4,7 @@ import net.savagedev.killrewards.KillRewards;
 import net.savagedev.killrewards.api.events.KillRewardEvent;
 import net.savagedev.killrewards.user.User;
 import net.savagedev.killrewards.user.UserManager;
-import org.bukkit.ChatColor;
+import net.savagedev.killrewards.utils.MessageUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -52,7 +52,7 @@ public class PlayerListeners implements Listener {
             user.removeKillTime(victim.getUniqueId());
         }
 
-        if (this.plugin.getConfig().getBoolean("api-enabled")) {
+        if (this.plugin.isApiEnabled()) {
             KillRewardEvent event = new KillRewardEvent(user, userManager.get(victim));
             this.plugin.getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) {
@@ -60,7 +60,7 @@ public class PlayerListeners implements Listener {
             }
         }
 
-        killer.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(this.plugin.getConfig().getString("message")).replace("%player%", killer.getName()).replace("%victim%", victim.getName())));
+        MessageUtils.message(killer, Objects.requireNonNull(this.plugin.getConfig().getString("message")).replace("%player%", killer.getName()).replace("%victim%", victim.getName()));
         for (String reward : this.plugin.getConfig().getStringList("rewards")) {
             this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), reward.replace("%player%", killer.getName()));
         }

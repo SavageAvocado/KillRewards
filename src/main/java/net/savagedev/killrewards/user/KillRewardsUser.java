@@ -29,7 +29,7 @@ public class KillRewardsUser extends YamlConfiguration implements User {
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
             this.ioLock.lock();
             try {
-                this.load(Files.newBufferedReader(path, StandardCharsets.UTF_8));
+                super.load(Files.newBufferedReader(this.path, StandardCharsets.UTF_8));
             } catch (IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             } finally {
@@ -90,7 +90,7 @@ public class KillRewardsUser extends YamlConfiguration implements User {
     @Override
     public Optional<Long> getKillTime(UUID uuid) {
         if (this.contains(uuid.toString())) {
-            return Optional.of(this.getLong(uuid.toString()));
+            return Optional.of(super.getLong(uuid.toString()));
         }
         return Optional.empty();
     }

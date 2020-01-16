@@ -1,9 +1,20 @@
 name: KillRewards
-description: Reward players for killing other players.
+description: 'Reward players for killing other players.'
 
 author: SavageAvocado
 website: savagedev.net
 
 main: net.savagedev.killrewards.KillRewards
-api-version: "1.13"
+api-version: '1.13'
 version: 1.0.0
+
+commands:
+  killrewards:
+    description: 'Reload the plugin.'
+    permission: 'killrewards.reload'
+    aliases: ['kr']
+
+permissions:
+  killrewards.reload:
+    description: 'Allows the holder to reload the plugin.'
+    default: op

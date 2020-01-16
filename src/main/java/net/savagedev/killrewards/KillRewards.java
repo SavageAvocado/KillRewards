@@ -1,8 +1,10 @@
 package net.savagedev.killrewards;
 
 import net.savagedev.killrewards.api.KillRewardsAPI;
+import net.savagedev.killrewards.commands.KillRewardsCmd;
 import net.savagedev.killrewards.listeners.PlayerListeners;
 import net.savagedev.killrewards.user.UserManager;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -11,6 +13,7 @@ import java.util.logging.Level;
 
 public class KillRewards extends JavaPlugin {
     private TimeUnit timeUnit = TimeUnit.MINUTES;
+    private boolean apiEnabled;
     private long period;
 
     private UserManager userManager;
@@ -19,6 +22,7 @@ public class KillRewards extends JavaPlugin {
     public void onEnable() {
         this.initConfig();
         this.initListeners();
+        this.initCommands();
         this.initApi();
     }
 
@@ -26,6 +30,15 @@ public class KillRewards extends JavaPlugin {
     public void onDisable() {
         if (this.userManager != null) {
             this.userManager.shutdown();
+        }
+    }
+
+    public void reload() {
+        this.reloadConfig();
+        this.initConfig();
+
+        if (this.userManager != null) {
+            this.userManager.reload();
         }
     }
 
@@ -39,14 +52,22 @@ public class KillRewards extends JavaPlugin {
         }
 
         this.period = this.getConfig().getLong("reward-period.time", -1L);
+        this.apiEnabled = this.getConfig().getBoolean("api-enabled");
     }
 
     private void initListeners() {
         this.getServer().getPluginManager().registerEvents(new PlayerListeners(this), this);
     }
 
+    private void initCommands() {
+        final PluginCommand command = this.getCommand("killrewards");
+        if (command != null) {
+            command.setExecutor(new KillRewardsCmd(this));
+        }
+    }
+
     private void initApi() {
-        if (this.getConfig().getBoolean("api-enabled")) {
+        if (this.isApiEnabled()) {
             new KillRewardsAPI(this.getUserManager());
         }
     }
@@ -56,6 +77,10 @@ public class KillRewards extends JavaPlugin {
             this.userManager = new UserManager(this);
         }
         return this.userManager;
+    }
+
+    public boolean isApiEnabled() {
+        return this.apiEnabled;
     }
 
     public TimeUnit getTimeUnit() {

@@ -27,6 +27,13 @@ public class UserManager implements Iterable<User> {
         }
     }
 
+    public void reload() {
+        this.shutdown();
+        for (Player player : this.plugin.getServer().getOnlinePlayers()) {
+            this.load(player);
+        }
+    }
+
     public User load(Player player) {
         final Path path = this.plugin.getDataFolder().toPath().resolve(Paths.get("storage", player.getUniqueId().toString() + ".yml"));
 
@@ -60,7 +67,8 @@ public class UserManager implements Iterable<User> {
         this.userCache.invalidateAll();
     }
 
-    @Override @Nonnull
+    @Override
+    @Nonnull
     public Iterator<User> iterator() {
         return this.userCache.asMap().values().iterator();
     }
