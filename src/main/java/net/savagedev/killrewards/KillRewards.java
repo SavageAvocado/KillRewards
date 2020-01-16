@@ -21,6 +21,7 @@ public class KillRewards extends JavaPlugin {
     @Override
     public void onEnable() {
         this.initConfig();
+        this.initManagers();
         this.initListeners();
         this.initCommands();
         this.initApi();
@@ -28,18 +29,13 @@ public class KillRewards extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (this.userManager != null) {
-            this.userManager.shutdown();
-        }
+        this.userManager.shutdown();
     }
 
     public void reload() {
         this.reloadConfig();
         this.initConfig();
-
-        if (this.userManager != null) {
-            this.userManager.reload();
-        }
+        this.userManager.reload();
     }
 
     private void initConfig() {
@@ -53,6 +49,10 @@ public class KillRewards extends JavaPlugin {
 
         this.period = this.getConfig().getLong("reward-period.time", -1L);
         this.apiEnabled = this.getConfig().getBoolean("api-enabled");
+    }
+
+    private void initManagers() {
+        this.userManager = new UserManager(this);
     }
 
     private void initListeners() {
@@ -73,9 +73,6 @@ public class KillRewards extends JavaPlugin {
     }
 
     public UserManager getUserManager() {
-        if (this.userManager == null) {
-            this.userManager = new UserManager(this);
-        }
         return this.userManager;
     }
 
